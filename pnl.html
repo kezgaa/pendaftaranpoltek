@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Pendaftaran Ulang - Politeknik Negeri</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #eef2f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 620px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 12px 48px rgba(0,0,0,0.08);
+            padding: 32px 30px;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #1a2a4a;
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+        }
+        .header .kementerian {
+            font-size: 11px;
+            font-weight: 600;
+            color: #4a5a6e;
+            letter-spacing: 1px;
+        }
+        .header .nama-kampus {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a2a4a;
+            margin: 4px 0 2px;
+        }
+        .header .alamat {
+            font-size: 11px;
+            color: #5a6a7e;
+            line-height: 1.4;
+        }
+        .header .tahun {
+            font-size: 11px;
+            color: #5a6a7e;
+            margin-top: 4px;
+        }
+        h2 {
+            color: #1a2a4a;
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        .sub {
+            color: #5a6a7e;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+            color: #1e2a3a;
+            margin-bottom: 4px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1.5px solid #d8dee8;
+            border-radius: 12px;
+            font-size: 15px;
+            background: #f8fafc;
+            transition: 0.2s;
+        }
+        .form-group input:focus, .form-group select:focus {
+            border-color: #1a2a4a;
+            outline: none;
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(26,42,74,0.08);
+        }
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background: #1a2a4a;
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 6px;
+        }
+        .btn-primary:hover { background: #0f1d35; }
+        .hidden { display: none; }
+        .payment-box {
+            background: #f6f9fc;
+            border-radius: 16px;
+            padding: 20px 22px;
+            border: 1px solid #e2e8f0;
+            margin: 16px 0 18px;
+        }
+        .payment-box .va-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a2a4a;
+            letter-spacing: 4px;
+            background: #fff;
+            padding: 12px 16px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 10px 0 16px;
+            border: 2px dashed #1a2a4a;
+        }
+        .payment-box .instruksi {
+            font-size: 14px;
+            color: #1e2a3a;
+            line-height: 1.8;
+        }
+        .tagihan-total {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a2a4a;
+            text-align: center;
+            margin: 6px 0 10px;
+        }
+        .btn-success {
+            width: 100%;
+            background: #1e7e34;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 8px;
+        }
+        .btn-success:hover { background: #14622a; }
+        #successMsg {
+            display: none;
+            background: #dff0d8;
+            color: #1e5a2a;
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 14px;
+            font-weight: 500;
+            text-align: center;
+        }
+        .footer-copy {
+            text-align: center;
+            font-size: 12px;
+            color: #8a9aac;
+            margin-top: 24px;
+            border-top: 1px solid #e9edf4;
+            padding-top: 16px;
+        }
+        .info-data {
+            background: #f6f9fc;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 14px;
+            font-size: 14px;
+        }
+        .info-data span { font-weight: 600; color: #1a2a4a; }
+        .total-ringkasan {
+            background: #eef4fa;
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin: 12px 0 16px;
+            text-align: center;
+        }
+        .total-ringkasan .label { font-weight: 600; color: #1a2a4a; }
+        .total-ringkasan .nominal { font-size: 24px; font-weight: 700; color: #1a2a4a; }
+        .btn-back {
+            background: transparent;
+            border: 1px solid #8a9aac;
+            color: #4a5a6e;
+            padding: 6px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+        .btn-back:hover { background: #e9edf4; }
+
+        /* ===== QRIS ===== */
+        .qris-box {
+            text-align: center;
+            margin: 12px 0 16px;
+            padding: 16px;
+            background: #fff;
+            border-radius: 14px;
+            border: 2px solid #e2e8f0;
+        }
+        .qris-box img {
+            max-width: 220px;
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+        }
+        .qris-box .label-qris {
+            font-weight: 600;
+            color: #1a2a4a;
+            font-size: 15px;
+            margin-bottom: 6px;
+        }
+        .qris-box .sub-qris {
+            font-size: 13px;
+            color: #5a6a7e;
+        }
+        .metode-pilihan {
+            display: flex;
+            gap: 12px;
+            margin: 14px 0 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .metode-pilihan button {
+            padding: 10px 24px;
+            border-radius: 30px;
+            border: 2px solid #d8dee8;
+            background: #fff;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #1a2a4a;
+        }
+        .metode-pilihan button.active {
+            border-color: #1a2a4a;
+            background: #1a2a4a;
+            color: #fff;
+        }
+        .metode-pilihan button:hover {
+            border-color: #1a2a4a;
+        }
+        @media (max-width:500px) {
+            .container { padding: 20px; }
+            .qris-box img { max-width: 180px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ===== HEADER ===== -->
+    <div class="header">
+        <div class="kementerian">KEMENTERIAN PENDIDIKAN TINGGI, SAINS, DAN TEKNOLOGI</div>
+        <div class="nama-kampus">POLITEKNIK NEGERI</div>
+        <div class="tahun">Pengumuman Nomor: 5257/DST/PL20/DV.01.00/2026 | 15 Juni 2026</div>
+    </div>
+
+    <hr style="border:none; border-top:2px solid #e9edf4; margin:0 0 20px 0;" />
+
+    <!-- ===== FORM PENDAFTARAN ===== -->
+    <div id="formSection">
+        <h2>Pendaftaran Ulang Mahasiswa Baru</h2>
+        <div class="sub">Pilih program studi, biaya akan muncul otomatis.</div>
+
+        <form id="daftarForm" onsubmit="return processRegistration(event)">
+            <div class="form-group">
+                <label>Nama Lengkap</label>
+                <input type="text" id="nama" placeholder="Contoh: Ahmad Fauzi" required />
+            </div>
+            <div class="form-group">
+                <label>NIM (jika ada) – opsional</label>
+                <input type="text" id="nim" placeholder="210010001" />
+            </div>
+            <div class="form-group">
+                <label>Program Studi / Jurusan</label>
+                <select id="prodi" required onchange="updateBiaya()">
+                    <option value="">-- Pilih Program Studi --</option>
+                    <optgroup label="TEKNIK – SARJANA TERAPAN">
+                        <option value="4250000|3500000">Teknologi Rekayasa Konstruksi Jalan dan Jembatan</option>
+                        <option value="3500000|2500000">Teknologi Rekayasa Konstruksi Bangunan Gedung</option>
+                        <option value="4250000|5000000">Teknologi Rekayasa Kimia Industri</option>
+                        <option value="3500000|3500000">Teknologi Rekayasa Manufaktur</option>
+                        <option value="3500000|2500000">Teknologi Rekayasa Pengelasan dan Fabrikasi</option>
+                        <option value="3500000|2500000">Teknologi Rekayasa Instrumentasi dan Kontrol</option>
+                        <option value="3500000|2500000">Teknologi Rekayasa Jaringan Telekomunikasi</option>
+                        <option value="3500000|2500000">Teknologi Rekayasa Pembangkit Energi</option>
+                        <option value="3500000|2500000">Teknologi Rekayasa Mekatronika</option>
+                        <option value="5000000|7500000">Teknik Informatika</option>
+                        <option value="3500000|2500000">Teknologi Rekayasa Komputer Jaringan</option>
+                        <option value="3500000|3500000">Teknologi Rekayasa Multimedia</option>
+                        <option value="3500000|0">Teknologi Rekayasa Perangkat Lunak</option>
+                    </optgroup>
+                    <optgroup label="TEKNIK – DIPLOMA TIGA">
+                        <option value="3000000|0">Teknologi Konstruksi Bangunan Air</option>
+                        <option value="3000000|0">Teknologi Konstruksi Jalan dan Jembatan</option>
+                        <option value="3500000|1500000">Teknologi Kimia</option>
+                        <option value="3500000|3500000">Teknologi Mesin</option>
+                        <option value="3500000|1500000">Teknologi Industri</option>
+                        <option value="3000000|1500000">Teknologi Elektronika</option>
+                        <option value="3000000|0">Teknologi Telekomunikasi</option>
+                        <option value="3500000|1500000">Teknologi Listrik</option>
+                    </optgroup>
+                    <optgroup label="BISNIS & MANAJEMEN">
+                        <option value="3500000|3500000">Akuntansi Lembaga Keuangan Syariah</option>
+                        <option value="3500000|2500000">Akuntansi Sektor Publik</option>
+                        <option value="4250000|3500000">Manajemen Keuangan Sektor Publik</option>
+                        <option value="3000000|0">Bahasa Inggris untuk Komunikasi Bisnis dan Profesional</option>
+                        <option value="3000000|1500000">Akuntansi (D3)</option>
+                        <option value="3000000|2500000">Administrasi Bisnis (D3)</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Alamat Email</label>
+                <input type="email" id="email" placeholder="email@domain.com" required />
+            </div>
+            <div class="form-group">
+                <label>Nomor WhatsApp / HP</label>
+                <input type="text" id="hp" placeholder="0812-3456-7890" required />
+            </div>
+
+            <div class="total-ringkasan">
+                <div class="label">Total Biaya Pendaftaran</div>
+                <div class="nominal" id="tampilTotal">Rp 0</div>
+            </div>
+
+            <button type="submit" class="btn-primary">Daftar & Lanjut ke Pembayaran</button>
+        </form>
+    </div>
+
+    <!-- ===== PEMBAYARAN ===== -->
+    <div id="paymentSection" class="hidden">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <h2 style="margin:0; font-size:20px;">💳 Instruksi Pembayaran</h2>
+            <button class="btn-back" onclick="resetForm()">↺ Kembali</button>
+        </div>
+
+        <div class="info-data">
+            <div><span>Kode Pendaftaran</span> : <span id="tampilToken">-</span></div>
+            <div><span>Nama</span> : <span id="tampilNama">-</span></div>
+            <div><span>Program Studi</span> : <span id="tampilProdi">-</span></div>
+        </div>
+
+        <!-- ===== PILIH METODE ===== -->
+        <div class="metode-pilihan">
+            <button class="active" id="btnVA" onclick="pilihMetode('sistem lagi rusak')">🏦 Virtual Account</button>
+            <button id="btnQRIS" onclick="pilihMetode('qris')">📱 QRIS</button>
+        </div>
+
+        <!-- ===== METODE VA ===== -->
+        <div id="metodeVA" class="payment-box">
+            <div style="font-weight:600; color:#1a2a4a;">🏦 Virtual Account</div>
+            <div class="va-number">silahkan memakai qris</div>
+            <p style="font-size:13px; color:#5a6a7e; text-align:center; margin:-6px 0 12px;">
+                sistem lagi rusak!.
+            </p>
+            <div class="instruksi">
+                <p><strong>Total yang harus ditransfer:</strong></p>
+                <div class="tagihan-total" id="totalBayarVA">Rp 0</div>
+                <hr style="margin:12px 0; border-color:#d8dee8;" />
+                <p><strong>📋 Langkah Pembayaran:</strong></p>
+                <ol style="padding-left:20px; margin:8px 0;">
+                    <li>Buka aplikasi <strong>mobile banking</strong> atau <strong>ATM</strong>.</li>
+                    <li>Pilih menu <strong>Transfer → Metode qris</strong>.</li>
+                    <li>Masukkan qris: <strong></strong></li>
+                    <li>Masukkan nominal sesuai total fakultasnya.</li>
+                    <li>Konfirmasi & selesaikan transaksi.</li>
+                </ol>
+                <p style="margin-top:10px; color:#1a2a4a; font-weight:600;">
+                    📌 VA ini terdaftar atas nama <strong>PANITIA PENERIMAAN POLITEKNIK</strong>
+                </p>
+            </div>
+        </div>
+
+        <!-- ===== METODE QRIS ===== -->
+        <div id="metodeQRIS" class="payment-box" style="display:none;">
+            <div style="font-weight:600; color:#1a2a4a;">📱 QRIS</div>
+            <p style="font-size:14px; color:#5a6a7e; text-align:center; margin:4px 0 8px;">
+                Scan QRIS di bawah menggunakan aplikasi mobile banking atau e-wallet.
+            </p>
+            <div class="qris-box">
+                <div class="label-qris">QRIS Pendaftaran</div>
+                <!-- ===== GANTI QRIS DI SINI ===== -->
+                <img src="https://i.ibb.co.com/MwYYF4S/photo-6170266609075818682-x.jpg" alt="QRIS" />
+                <div class="sub-qris">Total : <strong id="totalBayarQRIS">Rp sesuaikan nominal</strong></div>
+            </div>
+            <div class="instruksi">
+                <p><strong>📋 Langkah Pembayaran:</strong></p>
+                <ol style="padding-left:20px; margin:8px 0;">
+                    <li>Buka aplikasi <strong>mobile banking</strong> atau <strong>e-wallet</strong> (ShopeePay, OVO, DANA, Gopay).</li>
+                    <li>Pilih menu <strong>Scan QRIS</strong>.</li>
+                    <li>Scan QR code di atas.</li>
+                    <li>Masukkan nominal sesuai total tagihan.</li>
+                    <li>Konfirmasi & selesaikan transaksi.</li>
+                </ol>
+                <p style="margin-top:10px; color:#1a2a4a; font-weight:600;">
+                    📌 Penerima : <strong>PANITIA PENERIMAAN POLITEKNIK</strong>
+                </p>
+            </div>
+        </div>
+
+        <button class="btn-success" onclick="showSuccess()">✅ Saya Sudah Transfer / Bayar</button>
+        <div id="successMsg">✅ Terima kasih! Verifikasi pembayaran akan diproses dalam 1x24 jam.</div>
+
+        <div class="footer-copy" style="margin-top:20px;">
+            * Simpan bukti transfer / scan QRIS sebagai referensi.
+        </div>
+    </div>
+
+    <div class="footer-copy" style="margin-top:12px;">
+        © 2026 — Politeknik Negeri | Sistem Pendaftaran Terpadu
+    </div>
+
+</div>
+
+<script>
+    // ===== UPDATE BIAYA =====
+    function updateBiaya() {
+        const select = document.getElementById('prodi');
+        const val = select.value;
+        const totalSpan = document.getElementById('tampilTotal');
+        if (!val) {
+            totalSpan.textContent = 'Rp 0';
+            return;
+        }
+        const parts = val.split('|');
+        const ukt = parseInt(parts[0]) || 0;
+        const sbp = parseInt(parts[1]) || 0;
+        const kes = 35000;
+        const total = ukt + sbp + kes;
+        totalSpan.textContent = 'Rp ' + total.toLocaleString('id-ID');
+    }
+
+    // ===== PROSES REGISTRASI =====
+    function processRegistration(e) {
+        e.preventDefault();
+
+        const nama = document.getElementById('nama').value.trim();
+        const nim = document.getElementById('nim').value.trim();
+        const prodiSelect = document.getElementById('prodi');
+        const prodiText = prodiSelect.options[prodiSelect.selectedIndex]?.text || '';
+        const val = prodiSelect.value;
+        const email = document.getElementById('email').value.trim();
+        const hp = document.getElementById('hp').value.trim();
+
+        if (!nama || !val || !email || !hp) {
+            alert('Harap lengkapi semua data.');
+            return false;
+        }
+
+        const parts = val.split('|');
+        const ukt = parseInt(parts[0]) || 0;
+        const sbp = parseInt(parts[1]) || 0;
+        const kes = 35000;
+        const total = ukt + sbp + kes;
+
+        const token = 'REG-' + Date.now().toString(36).toUpperCase();
+
+        document.getElementById('tampilToken').textContent = token;
+        document.getElementById('tampilNama').textContent = nama;
+        document.getElementById('tampilProdi').textContent = prodiText;
+
+        // Isi total di kedua metode
+        const totalStr = 'Rp ' + total.toLocaleString('id-ID');
+        document.getElementById('totalBayarVA').textContent = totalStr;
+        document.getElementById('totalBayarQRIS').textContent = totalStr;
+
+        document.getElementById('formSection').style.display = 'none';
+        document.getElementById('paymentSection').classList.remove('hidden');
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        console.log('Pendaftaran:', { token, nama, nim, prodi: prodiText, email, hp, total });
+
+        return false;
+    }
+
+    // ===== PILIH METODE =====
+    function pilihMetode(metode) {
+        const vaBox = document.getElementById('metodeVA');
+        const qrisBox = document.getElementById('metodeQRIS');
+        const btnVA = document.getElementById('btnVA');
+        const btnQRIS = document.getElementById('btnQRIS');
+
+        if (metode === 'va') {
+            vaBox.style.display = 'block';
+            qrisBox.style.display = 'none';
+            btnVA.classList.add('active');
+            btnQRIS.classList.remove('active');
+        } else {
+            vaBox.style.display = 'none';
+            qrisBox.style.display = 'block';
+            btnQRIS.classList.add('active');
+            btnVA.classList.remove('active');
+        }
+    }
+
+    // ===== SUDAH TRANSFER =====
+    function showSuccess() {
+        const msg = document.getElementById('successMsg');
+        msg.style.display = 'block';
+        const btn = document.querySelector('.btn-success');
+        if (btn) btn.style.display = 'none';
+    }
+
+    // ===== RESET =====
+    function resetForm() {
+        if (confirm('Kembali ke form pendaftaran?')) {
+            document.getElementById('formSection').style.display = 'block';
+            document.getElementById('paymentSection').classList.add('hidden');
+            document.getElementById('successMsg').style.display = 'none';
+            const btn = document.querySelector('.btn-success');
+            if (btn) btn.style.display = 'block';
+            document.getElementById('daftarForm').reset();
+            document.getElementById('tampilTotal').textContent = 'Rp 0';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        updateBiaya();
+    });
+</script>
+
+</body>
+</html>
